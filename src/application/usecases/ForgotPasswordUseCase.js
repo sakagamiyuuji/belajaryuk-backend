@@ -36,7 +36,11 @@ class ForgotPasswordUseCase {
       resetPasswordExpires,
     });
 
-    await this.emailService.sendPasswordResetEmail(normalizedEmail, resetToken);
+    try {
+      await this.emailService.sendPasswordResetEmail(normalizedEmail, resetToken);
+    } catch (err) {
+      console.error('Password reset email failed:', err.message);
+    }
 
     return { message: 'If the email exists, a reset link has been sent' };
   }

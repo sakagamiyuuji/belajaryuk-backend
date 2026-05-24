@@ -2,7 +2,7 @@ const { connectDatabase } = require('../infrastructure/database/mongodb');
 const UserRepository = require('../infrastructure/repositories/UserRepository');
 const BcryptPasswordHasher = require('../infrastructure/services/BcryptPasswordHasher');
 const JwtTokenService = require('../infrastructure/services/JwtTokenService');
-const ConsoleEmailService = require('../infrastructure/services/ConsoleEmailService');
+const createEmailService = require('../infrastructure/services/createEmailService');
 
 const RegisterUseCase = require('../application/usecases/RegisterUseCase');
 const LoginUseCase = require('../application/usecases/LoginUseCase');
@@ -26,7 +26,7 @@ async function createContainer() {
   const userRepository = new UserRepository();
   const passwordHasher = new BcryptPasswordHasher();
   const tokenService = new JwtTokenService();
-  const emailService = new ConsoleEmailService();
+  const emailService = createEmailService();
 
   const registerUseCase = new RegisterUseCase(userRepository, passwordHasher);
   const loginUseCase = new LoginUseCase(userRepository, passwordHasher, tokenService);

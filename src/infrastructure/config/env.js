@@ -1,5 +1,22 @@
 require('dotenv').config();
 
+function requireEnv(name) {
+  const value = process.env[name];
+  if (!value || !String(value).trim()) {
+    throw new Error(
+      `Missing required environment variable: ${name}. Set it in Render Dashboard → Environment.`
+    );
+  }
+  return value;
+}
+
+const isProduction = process.env.NODE_ENV === 'production';
+
+if (isProduction) {
+  requireEnv('MONGODB_URI');
+  requireEnv('JWT_SECRET');
+}
+
 const config = {
   port: process.env.PORT || 3004,
   jwt: {
@@ -15,6 +32,11 @@ const config = {
       .split(',')
       .map((origin) => origin.trim())
       .filter(Boolean),
+  },
+  email: {
+    resendApiKey: process.env.RESEND_API_KEY || null,
+    from: process.env.EMAIL_FROM || 'BelajarYuk <onboarding@resend.dev>',
+    appName: process.env.APP_NAME || 'BelajarYuk',
   },
 };
 
